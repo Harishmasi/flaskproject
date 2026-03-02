@@ -1,29 +1,22 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, url_for, redirect, render_template
 
-# create the application object
 app = Flask(__name__)
 
+@app.route("/")
+def room():
+    return render_template("index.html")
 
-@app.route('/')
-def home():
-    return "Hello, World!"
+@app.route("/<name>")
+def call(name):
+    return f"Hello {name}"
 
-@app.route('/welcome')
-def welcome():
-    return render_template('welcome.html')
+@app.route("/app")
+def route():
+    return redirect(url_for("db"))
 
-# route for handling the login page logic
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'secret':
-            error = 'Invalid Username/Password.'
-        else:
-            return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+@app.route("/db")
+def db():
+    return "This is the Database"
 
-
-# start the server with the 'run()' method
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__" :
+    app.run()
